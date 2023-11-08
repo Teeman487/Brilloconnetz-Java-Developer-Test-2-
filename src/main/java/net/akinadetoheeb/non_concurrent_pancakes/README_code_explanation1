@@ -1,0 +1,6 @@
+                              Explanation and Observation of Non Concurrency Version
+
+i.   Threads or ExecutorServices was not used. Pancake-making by the Shopkeeper and consumption process by the Users  were
+      simulated for each 30-second slot.
+ii.  The non-concurrent version uses an array to store each user's pancake consumption.
+iii. The non-concurrent is preferred  and recommended if more complex interactions between users are needed.

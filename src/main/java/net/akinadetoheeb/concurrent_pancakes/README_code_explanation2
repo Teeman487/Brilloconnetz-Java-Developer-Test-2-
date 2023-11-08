@@ -1,0 +1,12 @@
+                               Explanation and Observation of Concurrency Version
+
+i.  Threads or ExecutorServices was not used. Pancake-making by the Shopkeeper and consumption process by the Users  were
+    simulated for each 30-second slot.
+ii. In the concurrent version, we removed the array for pancakesEaten by Users since each user's pancake consumption is
+    independent and doesn't require an array to store their consumption. This simplifies the code and better represents
+    the non-concurrent nature of the problem.
+iii. The concurrent version simplifies the code by handling each user's consumption separately.
+iv.  The concurrent version is more efficient and cleaner
+
+
+
