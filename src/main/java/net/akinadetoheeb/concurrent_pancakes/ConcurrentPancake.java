@@ -13,12 +13,7 @@ public class ConcurrentPancake {
         final int numUsers = 3;
 
         int totalPancakesMade = 0;
-        int totalPancakesEaten = 0;
-
-
-        // Creates an array of integers with a single element, initialized to 0
-        final int[] totalMetPancakes ={0};
-        final int[] totalUnmetPancakes = {0};
+        int totalPancakesOrder = 0;
 
         // System will decide At Most 12 pancakes made by Shopkeeper in 30s
         Random randomPancakes = new Random();
@@ -33,33 +28,9 @@ public class ConcurrentPancake {
             CompletableFuture<Integer>[] users = new CompletableFuture[numUsers];
             for (int user = 0; user < numUsers; user++)
             {
-
-                users[user] = CompletableFuture.supplyAsync(() ->
-                {
-                    // Generates random integers of pancakes eaten by User between 1 and 5
-                    int pancakesOrderPerUser = randomPancakes.nextInt(maxPancakesPerUser) + 1;
-
-                    // User Request, Unmet Order by Shopkeeper
-                    if (pancakesOrderPerUser > pancakesMadeByShopkeeper)
-                    {
-                        // Unmet Pancakes by the Shopkeeper
-                        totalUnmetPancakes[0] +=  pancakesOrderPerUser - pancakesMadeByShopkeeper;
-
-                        // User couldn't eat any pancakes due to unmet order
-                        return 0;
-
-                    }
-
-                       // User Request, Order Met by Shopkeeper
-                    else
-                    {
-                        // Pancakes Met by the Shopkeeper
-                        totalMetPancakes[0] += pancakesOrderPerUser;
-
-                        // User eats Pancakes that was Met by Shopkeeper
-                        return pancakesOrderPerUser;
-                    }
-                });
+                // Generates random integers of pancakes eaten by User between 1 and 5
+                int pancakesOrderPerUser = randomPancakes.nextInt(maxPancakesPerUser) + 1;
+                users[user] = CompletableFuture.supplyAsync(() -> pancakesOrderPerUser );
             }
 
             // Combine all user and get the sum of pancakes eaten
@@ -72,12 +43,12 @@ public class ConcurrentPancake {
 
 
             // A Total Output of Five Different Time Slot Interval
-            int pancakesEatenByUsers = 0;
+            int pancakesOrderByUser = 0;
             int unmetOrders = 0;
 
             for (CompletableFuture<Integer> user : users) {
                 try {
-                    pancakesEatenByUsers += user.get();
+                    pancakesOrderByUser += user.get();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -85,7 +56,7 @@ public class ConcurrentPancake {
 
             // Total Outputs of Five Different Time Slot Interval
             totalPancakesMade += pancakesMadeByShopkeeper;
-            totalPancakesEaten += pancakesEatenByUsers;
+            totalPancakesOrder += pancakesOrderByUser;
 
 
             // Five Different Time Slot Interval
@@ -93,20 +64,26 @@ public class ConcurrentPancake {
             System.out.println("Starting Time of making the pancakes: " + ((time - 1) * 30) + " seconds");
             System.out.println("Ending Time of making the pancakes: " + (time * 30) + " seconds");
             System.out.println("Pancakes Made by Shopkeeper: " + pancakesMadeByShopkeeper);
-            System.out.println("Pancakes Eaten by a Single User: " + pancakesEatenByUsers);
 
-            // Math.max function to ensure that the result is non-negative
-            System.out.println("Wasted Pancakes: " + (Math.max(0, pancakesMadeByShopkeeper - pancakesEatenByUsers)));
-            System.out.println();
-
+            System.out.println(); // To space
 
         }
 
         // (Total) Output of Five Different Time Slot
-        System.out.println("Total Pancakes Made by Shopkeeper: " + totalPancakesMade);
-        System.out.println("Total Pancakes Eaten by Users: " + totalPancakesEaten);
-        System.out.println("Total Met Orders: " + totalMetPancakes[0]);
-        System.out.println("Total Unmet Pancakes by Shopkeeper: " + totalUnmetPancakes[0]);
+
+        System.out.println("Total Pancakes made by the Shopkeeper: " + totalPancakesMade);
+        System.out.println("Total Pancakes Ordered by Users: " + totalPancakesOrder);
+        if (totalPancakesMade > totalPancakesOrder) {
+            System.out.println("Total Wasted Pancakes: " + (totalPancakesMade - totalPancakesOrder));
+
+        } else {
+            System.out.println("Total UnMet Orders by Shopkeeper: " + (totalPancakesOrder - totalPancakesMade));
+            System.out.println("Total Pancakes Eaten by Users: " + (totalPancakesMade));
+        }
+        if (totalPancakesMade == totalPancakesOrder) {
+            System.out.println("Total Met Orders: " + (totalPancakesMade));
+
+        }
 
     }
 }

@@ -11,65 +11,58 @@ public class NonConcurrentPancake {
         final int maxPancakesByShopkeeper = 12;
         final int numOfUsers = 3;
         int totalPancakesMade = 0;
-        int totalPancakesEaten = 0;
-        int totalUnmetOrders = 0;
-        final int[] totalWastedPancakes = {0};
+        int totalPancakesOrderedByUsers = 0;
+      //  final int[] totalWastedPancakes = {0};
 
 
         // Shopkeeper Five Different Time Slot Interval for making the pancakes
-        for (int time = 1; time <= 5; time++)
-        {
+        for (int time = 1; time <= 2; time++) {
             // Generates random integers between 1 and 12, and the range includes both 1 and 12.
             int numbOfPancakes = new Random().nextInt(maxPancakesByShopkeeper) + 1;
 
 
-            int[] pancakesEaten = new int[numOfUsers];
-            int unmetOrders = 0;
+            // Note, we cant increase for the number of pancakesEaten
+            // preferred under First Loop for easy accessibility below
+            int[] pancakesOrder = new int[numOfUsers];
+
 
             for (int user = 0; user < numOfUsers; user++) // Indicates presence of three users(0,1,2)
             {
+                // Generates random integers of pancakes eaten per User between 1 and 5
+                pancakesOrder[user] = new Random().nextInt(maxPancakesPerUser) + 1; // 2
 
-                // Generates random integers of pancakes eaten by User between 1 and 5
-                pancakesEaten[user] = new Random().nextInt(maxPancakesPerUser) + 1; // 2
-
-                if (pancakesEaten[user] > numbOfPancakes)
-                {
-                    unmetOrders++;
-                    totalWastedPancakes[0] += pancakesEaten[user] - numbOfPancakes;
-
-                } else {
-                  //  numbOfPancakes -= pancakesEaten[user];
-                    totalPancakesEaten += pancakesEaten[user];
-
-                }
             }
 
+            //pancakesEatenByUsers += pancakesEaten; // We cannot increase for Array set of numbers
 
-            int pancakesEatenByUsers = 0;
-
-            for (int pancakesEat : pancakesEaten) {
-
-                    pancakesEatenByUsers += pancakesEat;
-
+            // Since we cant increase for Array set of numbers, We can easily access
+            // totalPancakesEatenByUsers by reading it using for loop
+            for (int pancakesEat : pancakesOrder) {
+                totalPancakesOrderedByUsers += pancakesEat;
             }
 
             totalPancakesMade += numbOfPancakes;
-            totalUnmetOrders += unmetOrders;
 
-            System.out.println("30-Second time Slot# " +time);
+            System.out.println("30-Second time Slot# " + time);
             System.out.println("Starting Time of making the pancakes: " + ((time - 1) * 30) + " seconds");
             System.out.println("Ending Time of making the pancakes: " + (time * 30) + " seconds");
             System.out.println("Pancakes Made by Shopkeeper: " + numbOfPancakes);
-            System.out.println("Pancakes Eaten by  User: " + pancakesEatenByUsers);
-
-            System.out.println("Unmet Orders: " + unmetOrders);
-            System.out.println("Wasted Pancakes: " + (Math.max(0, numbOfPancakes - pancakesEatenByUsers)));
-            System.out.println();
+            System.out.println();  // to space
         }
 
-        System.out.println("Total Pancakes made by the Shopkeeper: " + totalPancakesMade);
-        System.out.println("Total Pancakes Eaten by Users: " + totalPancakesEaten);
-        System.out.println("Total Unmet Orders: " + totalUnmetOrders);
+            System.out.println("Total Pancakes made by the Shopkeeper: " + totalPancakesMade);
+            System.out.println("Total Pancakes Ordered by Users: " + totalPancakesOrderedByUsers);
+            if (totalPancakesMade > totalPancakesOrderedByUsers) {
+                System.out.println("Total Wasted Pancakes: " + (totalPancakesMade - totalPancakesOrderedByUsers));
+
+            } else {
+                System.out.println("Total UnMet Orders by Shopkeeper: " + (totalPancakesOrderedByUsers - totalPancakesMade));
+                System.out.println("Total Pancakes Eaten by Users: " + (totalPancakesMade));
+            }
+        if (totalPancakesMade == totalPancakesOrderedByUsers) {
+            System.out.println("Total Met Orders: " + (totalPancakesMade));
+
+        }
 
     }
 }
